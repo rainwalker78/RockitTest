@@ -16,26 +16,20 @@
 //
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Web.UI;
 using Rock.Attribute;
-using Rock.Model;
-using System.Linq;
-using System.Web.UI.WebControls;
-using Rock.Web.UI.Controls;
 using Rock.Data;
-using Rock;
+using Rock.Model;
 
-/// <summary>
-
-/// </summary>
-namespace RockWeb.Blocks.Utility
+namespace RockWeb.Plugins.com_seansdigs.DeveloperTest
 {
     /// <summary>
     /// Template block for developers to use to start a new block.
     /// </summary>
-    [DisplayName( "Developer Test Get Groups" )]
-    [Category( "Utility > Get Groups Dev Test" )]
-    [Description( "Block to fetch Group list data from Rock." )]
+    [DisplayName( "Get Group Detail" )]
+    [Category("com_seansdigs > DeveloperTest")]
+    [Description( "Get some details!" )]
 
     #region Block Attributes
 
@@ -53,12 +47,8 @@ namespace RockWeb.Blocks.Utility
         DefaultValue = "ted@rocksolidchurchdemo.com",
         Order = 2 )]
 
-    [CustomRadioListField("Gender Filter", "Select in order to list only records for that gender",
-     "1^Male,2^Female", required: false)]
-  
-
     #endregion Block Attributes
-    public partial class GetGroups : Rock.Web.UI.RockBlock
+    public partial class GetGroupDetail : Rock.Web.UI.RockBlock
     {
 
         #region Attribute Keys
@@ -75,7 +65,7 @@ namespace RockWeb.Blocks.Utility
 
         private static class PageParameterKey
         {
-            public const string StarkId = "StarkId";
+            public const string GroupId = "GroupId";
         }
 
         #endregion PageParameterKeys
@@ -115,28 +105,20 @@ namespace RockWeb.Blocks.Utility
         /// <param name="e">The <see cref="T:System.EventArgs" /> object that contains the event data.</param>
         protected override void OnLoad( EventArgs e )
         {
-            base.OnLoad(e);
+            base.OnLoad( e );
 
-            if (!Page.IsPostBack)
+
+            if ( !Page.IsPostBack )
             {
-                //var genderValue = GetAttributeValue("GenderFilter");
-
-                //var query = new PersonService(new RockContext()).Queryable();
-
-                //if (!string.IsNullOrEmpty(genderValue))
-                //{
-                //    Gender gender = genderValue.ConvertToEnum<Gender>();
-                //    query = query.Where(p => p.Gender == gender);
-                //}
-
-                //gPeople.DataSource = query.ToList();
-                //gPeople.DataBind();
-
-                var items = new GroupService(new RockContext()).Queryable().ToList();
-                gGroups.DataSource = items;
-                gGroups.DataBind();      
-
-               
+                int groupId = int.Parse(PageParameter("GroupId"));
+                var query = new GroupService(new RockContext()).Queryable();
+                query = query.Where(p => p.Id == groupId);
+                var items = query.ToList();
+                lblName.Text = items[0].Name;
+                lblDescription.Text = items[0].Description;
+                lblCapacity.Text = items[0].GroupCapacity.ToString();
+                lblCreatedOn.Text = items[0].CreatedDateTime.ToString();
+                lblModifiedOn.Text = items[0].ModifiedDateTime.ToString();
             }
         }
 
@@ -156,25 +138,6 @@ namespace RockWeb.Blocks.Utility
 
         }
 
-        protected void gPeople_RowSelected(object sender, RowEventArgs e)
-        {
-            int personId = (int)e.RowKeyValues["Id"];
-            Response.Redirect(string.Format("~/Person/{0}", personId), false);
-
-            // prevents .NET from quietly throwing ThreadAbortException
-            Context.ApplicationInstance.CompleteRequest();
-            return;
-        }
-
-        protected void gGroups_RowSelected(object sender, RowEventArgs e)
-        {
-            //int personId = (int)e.RowKeyValues["Id"];
-            //Response.Redirect(string.Format("~/Person/{0}", personId), false);
-
-            //// prevents .NET from quietly throwing ThreadAbortException
-            //Context.ApplicationInstance.CompleteRequest();
-            return;
-        }
         #endregion
 
         #region Methods
@@ -184,6 +147,3 @@ namespace RockWeb.Blocks.Utility
         #endregion
     }
 }
-
-
-

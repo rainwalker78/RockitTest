@@ -55,7 +55,9 @@ namespace RockWeb.Plugins.com_seansdigs.DeveloperTest
 
     [CustomRadioListField("Gender Filter", "Select in order to list only records for that gender",
      "1^Male,2^Female", required: false)]
-  
+
+    [LinkedPage("Related Page")]
+
 
     #endregion Block Attributes
     public partial class GetGroups : Rock.Web.UI.RockBlock
@@ -137,7 +139,9 @@ namespace RockWeb.Plugins.com_seansdigs.DeveloperTest
      
                 //var items = new GroupService(new RockContext()).Queryable().ToList();
                 gGroups.DataSource = query.ToList();
-                gGroups.DataBind();      
+                gGroups.DataBind(); 
+                
+                
 
                
             }
@@ -159,25 +163,24 @@ namespace RockWeb.Plugins.com_seansdigs.DeveloperTest
 
         }
 
-        protected void gPeople_RowSelected(object sender, RowEventArgs e)
-        {
-            int personId = (int)e.RowKeyValues["Id"];
-            Response.Redirect(string.Format("~/Person/{0}", personId), false);
-
-            // prevents .NET from quietly throwing ThreadAbortException
-            Context.ApplicationInstance.CompleteRequest();
-            return;
-        }
 
         protected void gGroups_RowSelected(object sender, RowEventArgs e)
         {
-            //int personId = (int)e.RowKeyValues["Id"];
-            //Response.Redirect(string.Format("~/Person/{0}", personId), false);
-
-            //// prevents .NET from quietly throwing ThreadAbortException
-            //Context.ApplicationInstance.CompleteRequest();
-            return;
+            NavigateToLinkedPage("RelatedPage", "GroupId", (int)e.RowKeyValues["Id"]);
+ 
         }
+
+
+        //protected void gGroups_RowSelected(object sender, RowEventArgs e)
+        //{
+        //    //int personId = (int)e.RowKeyValues["Id"];
+        //    //Response.Redirect(string.Format("~/Person/{0}", personId), false);
+        //    Response.Redirect("~GetGroupDetail.ascx");
+
+        //    // prevents .NET from quietly throwing ThreadAbortException
+        //    Context.ApplicationInstance.CompleteRequest();
+        //    return;
+        //}
         #endregion
 
         #region Methods

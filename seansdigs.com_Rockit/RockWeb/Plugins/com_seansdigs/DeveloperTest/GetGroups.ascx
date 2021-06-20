@@ -7,8 +7,11 @@
 
     <Rock:Grid ID="gGroups" runat="server" AllowSorting="true" OnRowSelected="gGroups_RowSelected" DataKeyNames="Id">
         <Columns>
-            <asp:BoundField DataField="Name" HeaderText="Group Name" />
-
+            <asp:BoundField DataField="Name" HeaderText="Name" />
+            <asp:BoundField DataField="Description" HeaderText="Description" />
+            <asp:BoundField DataField="GroupCapacity" HeaderText="Capacity" />
+            <asp:BoundField DataField="CreatedDateTime" HeaderText="Created On" />
+            <asp:BoundField DataField="ModifiedDateTime" HeaderText="Modified On" />
         </Columns>
     </Rock:Grid>
 
