@@ -121,29 +121,12 @@ namespace RockWeb.Plugins.com_seansdigs.DeveloperTest
 
             if (!Page.IsPostBack)
             {
-                //var genderValue = GetAttributeValue("GenderFilter");
-
-                //var query = new PersonService(new RockContext()).Queryable();
-
-                //if (!string.IsNullOrEmpty(genderValue))
-                //{
-                //    Gender gender = genderValue.ConvertToEnum<Gender>();
-                //    query = query.Where(p => p.Gender == gender);
-                //}
-
-                //gPeople.DataSource = query.ToList();
-                //gPeople.DataBind();
-
                 var query = new GroupService(new RockContext()).Queryable();
                 query = query.Where(p => p.IsActive == true && p.GroupTypeId == 25);
      
-                //var items = new GroupService(new RockContext()).Queryable().ToList();
                 gGroups.DataSource = query.ToList();
-                gGroups.DataBind(); 
-                
-                
+                gGroups.DataBind();  
 
-               
             }
         }
 
@@ -167,7 +150,6 @@ namespace RockWeb.Plugins.com_seansdigs.DeveloperTest
         protected void gGroups_RowSelected(object sender, RowEventArgs e)
         {
             NavigateToLinkedPage("RelatedPage", "GroupId", (int)e.RowKeyValues["Id"]);
- 
         }
 
 

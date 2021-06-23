@@ -157,6 +157,7 @@ namespace RockWeb.Blocks.DeveloperTest
 
             tbFirstName.Text = rFilter.GetUserPreference( "CustomPeopleList-FirstName" );
             tbLastName.Text = rFilter.GetUserPreference( "CustomPeopleList-LastName" );
+            tbFunnyNickName.Text = rFilter.GetUserPreference("CustomPeopleList-FunnyNickName");
 
             string genderValue = rFilter.GetUserPreference( "CustomPeopleList-Gender" );
             if ( !string.IsNullOrWhiteSpace( genderValue ) )
@@ -251,15 +252,16 @@ namespace RockWeb.Blocks.DeveloperTest
             //filter on funny nick name here, since we need the funny nick name generated before we can filter on it           
             if (!string.IsNullOrWhiteSpace(funnyNickName))
             {
-                var dataSourceFiltered = dataSource.AsQueryable().Where(p => p.FunnyNickName.StartsWith(funnyNickName)).ToList();
+                var dataSourceFiltered = dataSource.AsQueryable().Where(p => p.FunnyNickName.ToLower().StartsWith(funnyNickName.ToLower())).ToList();
                 gPeople.DataSource = dataSourceFiltered;
                 gPeople.DataBind();
                 return;
+
             }
 
             gPeople.DataSource = dataSource;
-            gPeople.DataBind();
-
+            gPeople.DataBind(); 
+           
         }
 
         #endregion

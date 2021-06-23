@@ -110,15 +110,24 @@ namespace RockWeb.Plugins.com_seansdigs.DeveloperTest
 
             if ( !Page.IsPostBack )
             {
+                
                 int groupId = int.Parse(PageParameter("GroupId"));
                 var query = new GroupService(new RockContext()).Queryable();
                 query = query.Where(p => p.Id == groupId);
                 var items = query.ToList();
                 lblName.Text = items[0].Name;
                 lblDescription.Text = items[0].Description;
-                lblCapacity.Text = items[0].GroupCapacity.ToString();
                 lblCreatedOn.Text = items[0].CreatedDateTime.ToString();
                 lblModifiedOn.Text = items[0].ModifiedDateTime.ToString();
+
+                if (items[0].GroupCapacity.HasValue)
+                {
+                    lblCapacity.Text = items[0].GroupCapacity.ToString();
+                }
+                else
+                {
+                    lblCapacity.Text = "Unknown";
+                }
             }
         }
 
